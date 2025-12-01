@@ -127,13 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="BMPImage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Robot36Encoder.cpp" />
+    <ClCompile Include="SSTVEncoder.cpp" />
     <ClCompile Include="WAVFile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMPStructs.h" />
     <ClInclude Include="BMPImage.h" />
-    <ClInclude Include="Image.h" />
+    <ClInclude Include="Robot36Encoder.h" />
+    <ClInclude Include="SSTVEncoder.h" />
     <ClInclude Include="WAVFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

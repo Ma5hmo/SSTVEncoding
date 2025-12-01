@@ -1,8 +1,8 @@
 #include <fstream>
-#include "Image.h"
+#include "BMPImage.h"
 
 // BMP format conversion
-Image::Image(const std::string& filepath)
+BMPImage::BMPImage(const std::string& filepath)
     : _pixels()
 {
     std::ifstream file(filepath, std::ios::binary);
@@ -31,7 +31,7 @@ Image::Image(const std::string& filepath)
     file.close();
 }
 
-const std::vector<YUVPixel> Image::GetYUVPixels() const
+const std::vector<YUVPixel> BMPImage::GetYUVPixels() const
 {
     std::vector<YUVPixel> newPixels(_pixels.size());
     for (const Pixel& p : _pixels) {
@@ -40,12 +40,12 @@ const std::vector<YUVPixel> Image::GetYUVPixels() const
     return newPixels;
 }
 
-const std::vector<Pixel>& Image::GetPixels() const
+const std::vector<Pixel>& BMPImage::GetPixels() const
 {
     return _pixels;
 }
 
-YUVPixel Image::pixelRgbToYUV(const Pixel& p) const
+YUVPixel BMPImage::pixelRgbToYUV(const Pixel& p) const
 {
     YUVPixel newP;
     newP.y = 0.257 * p.red + 0.504 * p.green + 0.098 * p.blue + 16;

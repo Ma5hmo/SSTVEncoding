@@ -18,21 +18,33 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Image.cpp">
+    <ClCompile Include="BMPImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WAVFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Robot36Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SSTVEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMPStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="BMPImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Image.h">
+    <ClInclude Include="WAVFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WAVFile.h">
+    <ClInclude Include="SSTVEncoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot36Encoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
