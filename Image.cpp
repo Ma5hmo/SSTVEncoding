@@ -28,6 +28,7 @@ Image::Image(const std::string& filepath)
         file.read(reinterpret_cast<char*>(&p), 3);
         _pixels.push_back(std::move(p));
     }
+    file.close();
 }
 
 const std::vector<YUVPixel> Image::GetYUVPixels() const
