@@ -21,21 +21,23 @@ BMPImage::BMPImage(const std::string& filepath)
     _width = infoHeader.biWidth;
 
     file.seekg(fileHeader.bfOffBits, std::ios_base::beg); // seek pixel array
-    _pixels.reserve(fileHeader.bfSize / sizeof(Pixel));
-    for (int i = 0; i < fileHeader.bfSize; i += sizeof(Pixel))
+    size_t pixelCount = static_cast<size_t>(_width) * static_cast<size_t>(_height);
+    _pixels.reserve(pixelCount);
+    for (size_t i = 0; i < pixelCount; ++i)
     {
         Pixel p;
         file.read(reinterpret_cast<char*>(&p), 3);
-        _pixels.push_back(std::move(p));
+        _pixels.push_back(p);
     }
     file.close();
 }
 
 const std::vector<YUVPixel> BMPImage::GetYUVPixels() const
 {
-    std::vector<YUVPixel> newPixels(_pixels.size());
+    std::vector<YUVPixel> newPixels;
+    newPixels.reserve(_pixels.size());
     for (const Pixel& p : _pixels) {
-        newPixels.push_back(pixelRgbToYUV(p));
+        newPixels.push_back(PixelRgbToYUV(p));
     }
     return newPixels;
 }
@@ -45,7 +47,7 @@ const std::vector<Pixel>& BMPImage::GetPixels() const
     return _pixels;
 }
 
-YUVPixel BMPImage::pixelRgbToYUV(const Pixel& p) const
+/*static*/ YUVPixel BMPImage::PixelRgbToYUV(const Pixel& p)
 {
     YUVPixel newP;
     newP.y = 0.257 * p.red + 0.504 * p.green + 0.098 * p.blue + 16;

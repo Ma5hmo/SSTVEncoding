@@ -1,12 +1,12 @@
-#include "WAVFile.h"
+#include "Robot36Encoder.h"
 #include <iostream>
 
 int main()
 {
-	WAVFile wavfile("test.wav");
-	wavfile.AddAudioData(440, 4);
-	wavfile.WriteToFile();
-	std::cout << "written to file " << std::endl;
+	Robot36Encoder encoder("output.wav", "colorbars.bmp");
+	encoder.EncodeImage();
+	encoder.WriteToFile();
+	std::cout << "SSTV encoding complete. Output written to output.wav" << std::endl;
 }
 
 

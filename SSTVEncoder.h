@@ -10,7 +10,7 @@ public:
 	virtual void EncodeImage() = 0;
 	virtual void WriteToFile() = 0;
 
-private:
+protected:
 	WAVFile _wavFile;
 	BMPImage _bmpImage;
 };

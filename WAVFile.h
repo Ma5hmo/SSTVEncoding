@@ -1,14 +1,15 @@
 #pragma once
-#include <string>
-
-#include <cstdint>
 #include <array>
+#include <cstdint>
+#include <fstream>
+#include <numbers>
+#include <string>
 #include <vector>
 
 #define SAMPLE_RATE 44100
 #define CHANNELS_NUM 1
 
-#pragma pack(push, 1)  // ensures no padding is added by the compiler
+#pragma pack(push, 1)
 
 struct RIFFHeader {
     std::array<char, 4> chunkID{ 'R', 'I', 'F', 'F' };
@@ -22,7 +23,7 @@ struct FmtSubchunk {
     uint16_t audioFormat{ 1 };     // PCM
     uint16_t numChannels{ CHANNELS_NUM };
     uint32_t sampleRate{ SAMPLE_RATE };
-    uint32_t byteRate{ 88200 };   // calculated as sampleRate * numChannels * bitsPerSample/8
+    uint32_t byteRate{ 88200 };    // calculated as sampleRate * numChannels * bitsPerSample/8
     uint16_t blockAlign{ 2 };      // numChannels * bitsPerSample/8
     uint16_t bitsPerSample{ 16 };
 
@@ -38,8 +39,8 @@ struct DataSubchunkHeader {
 
     // data goes here
 };
-#pragma pack(pop)
 
+#pragma pack(pop)
 
 class WAVFile
 {
@@ -49,14 +50,20 @@ public:
     void WriteToFile();
 
 private:
-    static std::vector<int16_t> genAudioData(double frequency, double duration,
+    static std::vector<int16_t> genAudioData(
+        double frequency,
+        double duration,
+        double& currPhase,
         uint32_t sampleRate = SAMPLE_RATE,
         uint16_t amplitude = 30000,
         uint16_t numChannels = CHANNELS_NUM);
-	std::string _filename;
+
+    std::string _filename;
     RIFFHeader _riffHdr;
     FmtSubchunk _fmtHdr;
     DataSubchunkHeader _dataHdr;
     std::vector<int16_t> _audioData;
-};
 
+    // Keep oscillator phase between frequency segments.
+    double _phase;
+};

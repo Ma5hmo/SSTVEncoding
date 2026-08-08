@@ -1,19 +1,20 @@
 #include "WAVFile.h"
-#include <fstream>
+#include <algorithm>
 #include <cmath>
-#include <cstdint>
-
-static const int M_PI = 3.14159265359;
+#include <stdexcept>
 
 WAVFile::WAVFile(const std::string& filename)
-    : _filename(filename),
-      _riffHdr(), _fmtHdr(), _dataHdr(), _audioData()
+: _filename(filename),
+_riffHdr(),
+_fmtHdr(),
+_dataHdr(),
+_audioData()
 {
 }
 
 void WAVFile::AddAudioData(double frequency, double duration)
 {
-    auto newData = genAudioData(frequency, duration);
+    auto newData = genAudioData(frequency, duration, _phase, SAMPLE_RATE, 30000);
     _audioData.insert(_audioData.end(), newData.begin(), newData.end());
 }
 
@@ -35,21 +36,34 @@ void WAVFile::WriteToFile()
     file.close();
 }
 
-std::vector<int16_t> WAVFile::genAudioData(double frequency, double duration,
-	uint32_t sampleRate, uint16_t amplitude, uint16_t numChannels)
+std::vector<int16_t> WAVFile::genAudioData(
+    double frequency,
+    double duration,
+    double& currPhase,
+    uint32_t sampleRate,
+    uint16_t amplitude,
+    uint16_t numChannels)
 {
     uint32_t numSamples = static_cast<uint32_t>(duration * sampleRate);
     std::vector<int16_t> audioData;
     audioData.resize(numSamples * numChannels);
 
+    const double phaseIncrement =
+        2.0 * std::numbers::pi * frequency / sampleRate;
+
     for (uint32_t n = 0; n < numSamples; ++n) {
-        // Calculate sample value in range [-amplitude, amplitude]
-        double t = static_cast<double>(n) / sampleRate;
-        int16_t sample = static_cast<int16_t>(amplitude * std::sin(2 * M_PI * frequency * t));
+        int16_t sample = static_cast<int16_t>(amplitude * std::sin(currPhase));
 
         // Fill all channels (interleaved)
         for (uint16_t ch = 0; ch < numChannels; ++ch) {
             audioData[n * numChannels + ch] = sample;
+        }
+
+        // Preserve phase when changing frequencies.
+        currPhase += phaseIncrement;
+
+        if (currPhase >= 2.0 * std::numbers::pi) {
+            currPhase = std::fmod(currPhase, 2.0 * std::numbers::pi);
         }
     }
 
